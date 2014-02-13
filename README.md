@@ -5,7 +5,7 @@ Program that reads a list of student scores and outputs their grades, weighted o
 
 ## Assignment
 
-Project 1  COSC 600 Spring 2014  
+Project 1 **COSC 600** Spring 2014  
 Professor: H. Zhou  
 Due: Feb 14, 2014  
 
