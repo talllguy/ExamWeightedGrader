@@ -1,7 +1,7 @@
 /**
  * 
  */
-package src;
+package src.main.java;
 
 /**
  * @author elliottplack
@@ -14,7 +14,7 @@ import java.util.*;
 public class ExamGrade {
 	public static void main (String args[]) throws FileNotFoundException 
     {
-        Scanner fileLength = new Scanner(new File("grades.dat")); //provide file name from outside
+        Scanner fileLength = new Scanner(new File("src/main/resources/grades.txt")); //provide file name from outside
         int counter = 0; //keep track of how many integers in the file
         while(fileLength.hasNextInt()) 
         {
@@ -22,7 +22,7 @@ public class ExamGrade {
             fileLength.nextInt();
         }
        
-        Scanner arrayBuild = new Scanner(new File("grades.dat")); 
+        Scanner arrayBuild = new Scanner(new File("src/main/resources/grades.txt")); 
         int grades[] = new int[counter];
         for(int i=0;i<counter;i++)
         {
