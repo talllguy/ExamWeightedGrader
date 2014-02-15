@@ -1,12 +1,24 @@
-/**
- * 
- */
 package src.main.java;
 
-/**
- * @author elliottplack
- *
- */
+/**************************************************************
+COSC 600
+Elliott Plack
+12 FEB 2014                           Due date: 14 FEB 2014
+
+Problem: Take a list of exam scores and process them by computing
+	the average and then assigning a grade based on each score's
+	deviation away from the average. The standards are below 10%
+	difference = unsatisfactory, between 10% over and under =
+	satisfactory, over 10% better = outstanding. Process the
+	grade for each score in Java and output the results to a
+	neatly ordered file.
+Algorithm:
+	1. read the grades from a file to an array
+	2. get the average of the scores in the array
+	3. make another array of the grades for each score
+	4. output the scores and grades to a column file
+
+***************************************************************/
 
 import java.io.*;
 import java.util.*;
@@ -25,19 +37,19 @@ public class ExamGrade {
 		String path = "src/main/resources/grades.txt"; // setup a path var
 		Scanner fileLength = new Scanner(new File(path)); //provide file name from outside
         int counter = 0; //keep track of how many integers in the file
-        while(fileLength.hasNextInt()) 
+        while(fileLength.hasNextInt()) // counting the numbers in file
         {
             counter++;
             fileLength.nextInt();
         }
        
-        Scanner arrayBuild = new Scanner(new File(path)); 
+        Scanner arrayBuild = new Scanner(new File(path));
         int grades[] = new int[counter];
         for(int i=0;i<counter;i++)
         {
             grades[i]=arrayBuild.nextInt(); //fill the array with the integers
         }
-       
+        // close everything for good measure
         fileLength.close();
         arrayBuild.close();
 		
@@ -45,9 +57,9 @@ public class ExamGrade {
 	}
 
 	private static char scoreGrade(int gradeIndex, double average) {
-		// TODO Auto-generated method stub
+		// determines what grade to assign by calculating pct change and using logic
 		double percentage = 0;
-		percentage = (((gradeIndex - average) / average) * 100);
+		percentage = ((((double)gradeIndex - average) / average) * 100);
 		
 		if (percentage >= 10)
 			return 'O';
@@ -60,15 +72,17 @@ public class ExamGrade {
 	}
 	
 	private static char[] gradeScoreArrayCalc(int[] grades, double average) {
-		char[] tempArray = new char[grades.length];
+		// takes each grade calcuation and puts it in an array
+		char[] tempArray = new char[grades.length]; // make a temporary array for the method
 		for (int i = 0; i < grades.length; i++) {
-        	char gradeScore = scoreGrade(grades[i], average);
-        	tempArray[i] = gradeScore;
+        	char gradeScore = scoreGrade(grades[i], average); // get the grade
+        	tempArray[i] = gradeScore; // put it in the array
         }
 		return tempArray;
 	}
 
 	private static double calculateAverage(int[] grades) {
+		// Calculates the average of the score's array
 		int sum = 0;
 		double average = 0;
 		
@@ -80,18 +94,19 @@ public class ExamGrade {
 	}
 
 
-private static void makeOutputFile(int[] grades, char[] gradeScoreArray) throws IOException {
-	PrintWriter out = new PrintWriter("target/output.txt");
+	private static void makeOutputFile(int[] grades, char[] gradeScoreArray) throws IOException {
+	// writes the formatted output to a file	
+	PrintWriter out = new PrintWriter("target/output.txt"); // create printwriter
 	
-	String col1Heading = "Test Score";
+	String col1Heading = "Test Score"; // set up defaults
 	String col2Heading = "Grade";
 	String divider = "--------------------------";
 	
-	out.printf("%s %15s %n",col1Heading,col2Heading);
-	out.printf("%s %n",divider);
+	out.printf("%s %15s %n",col1Heading,col2Heading); // print the top row
+	out.printf("%s %n",divider); // divider
 	
 	for (int i = 0; i < grades.length; i++)
-		out.printf("%6d %17s %n",grades[i],gradeScoreArray[i]);
+		out.printf("%6d %17s %n",grades[i],gradeScoreArray[i]); // prints the array value for each iteration
 
 	out.close();
 	}
