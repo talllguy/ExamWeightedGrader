@@ -14,7 +14,16 @@ import java.util.*;
 public class ExamGrade {
 	public static void main (String args[]) throws IOException 
     {
-        Scanner fileLength = new Scanner(new File("src/main/resources/grades.txt")); //provide file name from outside
+        int[] grades = gradesGetter(); // method to get the grades from a file
+        double average = calculateAverage(grades); // method to calculate average
+        char[] gradeScoreArray = gradeScoreArrayCalc(grades,average); // method to store calculated grades in an array
+		makeOutputFile(grades, gradeScoreArray); // method to write the final file
+        
+    }
+
+	private static int[] gradesGetter() throws FileNotFoundException {
+		String path = "src/main/resources/grades.txt"; // setup a path var
+		Scanner fileLength = new Scanner(new File(path)); //provide file name from outside
         int counter = 0; //keep track of how many integers in the file
         while(fileLength.hasNextInt()) 
         {
@@ -22,7 +31,7 @@ public class ExamGrade {
             fileLength.nextInt();
         }
        
-        Scanner arrayBuild = new Scanner(new File("src/main/resources/grades.txt")); 
+        Scanner arrayBuild = new Scanner(new File(path)); 
         int grades[] = new int[counter];
         for(int i=0;i<counter;i++)
         {
@@ -31,43 +40,8 @@ public class ExamGrade {
        
         fileLength.close();
         arrayBuild.close();
-        
-        double average = calculateAverage(grades);
-        char[] gradeScoreArray = gradeScoreArrayCalc(grades,average);
-
-		makeOutputFile(grades, gradeScoreArray);
-        
-    }
-
-	private static char[] gradeScoreArrayCalc(int[] grades, double average) {
-		// TODO Auto-generated method stub
-		char[] tempArray = new char[grades.length];
-		for (int i = 0; i < grades.length; i++) {
-        	char gradeScore = scoreGrade(grades[i], average);
-        	tempArray[i] = gradeScore;
-        }
-		return tempArray;
-	}
-
-	private static void makeOutputFile(int[] grades, char[] gradeScoreArray) throws IOException {
-		// TODO Auto-generated method stub
 		
-		PrintWriter out = new PrintWriter("target/output.txt");
-		
-		String col1Heading = "Test Score";
-		String col2Heading = "Grade";
-		String divider = "--------------------------";
-		
-		out.printf("%s %15s %n",col1Heading,col2Heading);
-		out.printf("%s %n",divider);
-		
-		for (int i = 0; i < grades.length; i++)
-			out.printf("%d %15s %n",grades[i],gradeScoreArray[i]);
-		
-		
-		out.close();
-		
-		
+		return grades;
 	}
 
 	private static char scoreGrade(int gradeIndex, double average) {
@@ -84,6 +58,15 @@ public class ExamGrade {
 		else
 			return 'F'; // fail condition
 	}
+	
+	private static char[] gradeScoreArrayCalc(int[] grades, double average) {
+		char[] tempArray = new char[grades.length];
+		for (int i = 0; i < grades.length; i++) {
+        	char gradeScore = scoreGrade(grades[i], average);
+        	tempArray[i] = gradeScore;
+        }
+		return tempArray;
+	}
 
 	private static double calculateAverage(int[] grades) {
 		int sum = 0;
@@ -94,5 +77,22 @@ public class ExamGrade {
 		}
 		average = (double) sum / grades.length;
 		return average;
+	}
+
+
+private static void makeOutputFile(int[] grades, char[] gradeScoreArray) throws IOException {
+	PrintWriter out = new PrintWriter("target/output.txt");
+	
+	String col1Heading = "Test Score";
+	String col2Heading = "Grade";
+	String divider = "--------------------------";
+	
+	out.printf("%s %15s %n",col1Heading,col2Heading);
+	out.printf("%s %n",divider);
+	
+	for (int i = 0; i < grades.length; i++)
+		out.printf("%6d %17s %n",grades[i],gradeScoreArray[i]);
+
+	out.close();
 	}
 }
